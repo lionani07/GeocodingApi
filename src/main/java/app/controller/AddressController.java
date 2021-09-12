@@ -4,10 +4,7 @@ import app.model.Address;
 import app.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -30,5 +27,11 @@ public class AddressController {
                 .toUri();
 
         return ResponseEntity.created(location).body(addressCreated);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Address> update(@PathVariable final Long id, @RequestBody @Valid final Address address) {
+        final var pessoaUpdated = this.addressService.update(id, address);
+        return ResponseEntity.ok(pessoaUpdated);
     }
 }
