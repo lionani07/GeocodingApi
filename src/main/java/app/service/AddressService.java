@@ -20,7 +20,7 @@ public class AddressService {
     private final GeocodingApiAdapter geocodingApiAdapter;
 
     public Address save(final Address address) {
-        updateLocation(address);
+        setLocation(address);
         return this.addressRepository.save(address);
     }
 
@@ -44,7 +44,7 @@ public class AddressService {
         return this.addressRepository.findAll(pageable);
     }
 
-    private void updateLocation(final Address address) {
+    private void setLocation(final Address address) {
         if (latitudeAndLongitudeNotInformed(address)) {
             final var geocodingResponse = this.geocodingApiAdapter.findLatitudeAndLongitude(address);
             address.setLatitude(geocodingResponse.getLatitude());
