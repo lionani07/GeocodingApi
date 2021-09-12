@@ -34,4 +34,9 @@ public class AddressController {
         final var pessoaUpdated = this.addressService.update(id, address);
         return ResponseEntity.ok(pessoaUpdated);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable final Long id) {
+        this.addressService.delete(id);
+    }
 }

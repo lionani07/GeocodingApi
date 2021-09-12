@@ -28,4 +28,8 @@ public class AddressService {
                 .findById(id)
                 .orElseThrow(() -> new EmptyResultDataAccessException(1));
     }
+
+    public void delete(final Long id) {
+        this.addressRepository.deleteById(id);
+    }
 }
