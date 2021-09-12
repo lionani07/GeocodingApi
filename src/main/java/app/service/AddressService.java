@@ -1,8 +1,10 @@
 package app.service;
 
+import app.adapter.GeocodingAPIAdapter;
 import app.model.Address;
 import app.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -15,7 +17,18 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
 
+    private GeocodingAPIAdapter geocodingAPIAdapter;
+
     public Address save(final Address address) {
+
+        // Passar para um metodo bonitinho...
+
+        if (!isLatitudeAndLongitudeInformed(address)) {
+            final var response = this.geocodingAPIAdapter.findLatitudeAndLongitude(address);
+            address.setLatitude(response.getLatitude());
+            address.setLongitude(response.getLongitude());
+        }
+
         return this.addressRepository.save(address);
     }
 
@@ -37,5 +50,9 @@ public class AddressService {
 
     public Page<Address> findAll(Pageable pageable) {
         return this.addressRepository.findAll(pageable);
+    }
+
+    private boolean isLatitudeAndLongitudeInformed(Address address) {
+        return StringUtils.isAllBlank(address.getLatitude(), address.getLongitude());
     }
 }
