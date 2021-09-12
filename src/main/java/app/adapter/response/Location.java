@@ -1,4 +1,4 @@
-package app.adapter;
+package app.adapter.response;
 
 import lombok.Getter;
 import lombok.Setter;

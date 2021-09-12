@@ -1,6 +1,6 @@
 package app.service;
 
-import app.adapter.GeocodingAPIAdapter;
+import app.adapter.GeocodingApiAdapter;
 import app.model.Address;
 import app.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +17,17 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
 
-    private final GeocodingAPIAdapter geocodingAPIAdapter;
+    private final GeocodingApiAdapter geocodingApiAdapter;
 
     public Address save(final Address address) {
-
-        if (latitudeAndLongitudeNotInformed(address)) {
-            final var response = this.geocodingAPIAdapter.findLatitudeAndLongitude(address);
-            address.setLatitude(response.getLatitude());
-            address.setLongitude(response.getLongitude());
-        }
-
+        updateLocation(address);
         return this.addressRepository.save(address);
     }
 
     public Address update(final Long id, final Address address) {
         final var addressFound = find(id);
         BeanUtils.copyProperties(address, addressFound, "id");
-        return this.addressRepository.save(addressFound);
+        return this.save(addressFound);
     }
 
     public Address find(final Long id) {
@@ -48,6 +42,14 @@ public class AddressService {
 
     public Page<Address> findAll(Pageable pageable) {
         return this.addressRepository.findAll(pageable);
+    }
+
+    private void updateLocation(final Address address) {
+        if (latitudeAndLongitudeNotInformed(address)) {
+            final var geocodingResponse = this.geocodingApiAdapter.findLatitudeAndLongitude(address);
+            address.setLatitude(geocodingResponse.getLatitude());
+            address.setLongitude(geocodingResponse.getLongitude());
+        }
     }
 
     private boolean latitudeAndLongitudeNotInformed(Address address) {

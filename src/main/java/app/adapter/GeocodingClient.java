@@ -1,8 +1,10 @@
 package app.adapter;
 
+import app.adapter.response.GeocodingResponse;
+import app.exception.ClientException;
 import app.model.Address;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -28,8 +30,8 @@ public class GeocodingClient {
                         .queryParam("key", key)
                         .build()
                 )
-                .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
+                .onStatus(HttpStatus::isError, clientResponse -> Mono.error(new ClientException("A client error ocurred")))
                 .bodyToMono(GeocodingResponse.class);
     }
 
