@@ -14,6 +14,8 @@ public class AddressTemplates {
                 .city("Taubate")
                 .state("SP")
                 .country("Brasil")
-                .zipcode("12062-200");
+                .zipcode("12062-200")
+                .latitude("")
+                .longitude("");
     }
 }

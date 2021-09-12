@@ -1,16 +1,22 @@
 package app.controller;
 
+import app.adapter.GeocodingApiAdapter;
+import app.model.Address;
 import app.repository.AddressRepository;
 import app.template.AddressTemplates;
+import app.template.GeocodingResponseTemplates;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -26,6 +32,15 @@ class AddressControllerTest {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @MockBean
+    private GeocodingApiAdapter geocodingApiAdapter;
+
+    @BeforeEach
+    void setUp() {
+        Mockito.doReturn(GeocodingResponseTemplates.defaultBuilder().build())
+                .when(this.geocodingApiAdapter).findLatitudeAndLongitude(Mockito.any(Address.class));
+    }
 
     @Test
     @Sql("classpath:/data/test/CLEAR_DATAS.sql")
