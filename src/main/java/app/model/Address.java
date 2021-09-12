@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
+import static java.lang.String.format;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,6 +50,15 @@ public class Address {
     private String latitude;
 
     private String longitude;
+
+    public String geolocationFormat() {
+        return format("%s, %s, %s, %s, %s",
+                this.number,
+                this.streetName,
+                this.city,
+                this.state,
+                this.country);
+    }
 
 }
 

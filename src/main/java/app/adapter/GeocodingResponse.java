@@ -1,12 +1,27 @@
 package app.adapter;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-@AllArgsConstructor
+import java.util.List;
+
 @Getter
+@Setter
 public class GeocodingResponse {
 
-    private String latitude;
-    private String longitude;
+    private String status;
+
+    private List<Result> results;
+
+    public String getLongitude() {
+       return getLocation().getLng();
+    }
+
+    public String getLatitude() {
+        return getLocation().getLat();
+    }
+
+    private Location getLocation() {
+        return results.get(0).getGeometry().getLocation();
+    }
 }

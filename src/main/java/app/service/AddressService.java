@@ -17,13 +17,11 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
 
-    private GeocodingAPIAdapter geocodingAPIAdapter;
+    private final GeocodingAPIAdapter geocodingAPIAdapter;
 
     public Address save(final Address address) {
 
-        // Passar para um metodo bonitinho...
-
-        if (!isLatitudeAndLongitudeInformed(address)) {
+        if (latitudeAndLongitudeNotInformed(address)) {
             final var response = this.geocodingAPIAdapter.findLatitudeAndLongitude(address);
             address.setLatitude(response.getLatitude());
             address.setLongitude(response.getLongitude());
@@ -52,7 +50,7 @@ public class AddressService {
         return this.addressRepository.findAll(pageable);
     }
 
-    private boolean isLatitudeAndLongitudeInformed(Address address) {
+    private boolean latitudeAndLongitudeNotInformed(Address address) {
         return StringUtils.isAllBlank(address.getLatitude(), address.getLongitude());
     }
 }
