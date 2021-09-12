@@ -5,6 +5,8 @@ import app.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,5 +33,9 @@ public class AddressService {
 
     public void delete(final Long id) {
         this.addressRepository.deleteById(id);
+    }
+
+    public Page<Address> findAll(Pageable pageable) {
+        return this.addressRepository.findAll(pageable);
     }
 }

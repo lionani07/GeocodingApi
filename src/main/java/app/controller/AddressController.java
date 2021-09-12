@@ -3,6 +3,8 @@ package app.controller;
 import app.model.Address;
 import app.service.AddressService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -36,7 +38,20 @@ public class AddressController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable final Long id) {
+    public ResponseEntity<Void> delete(@PathVariable final Long id) {
         this.addressService.delete(id);
+        return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Address> find(@PathVariable final Long id) {
+        final var addressFound = this.addressService.find(id);
+        return ResponseEntity.ok(addressFound);
+    }
+
+    @GetMapping
+    public Page<Address> findAll(final Pageable pageable) {
+        return this.addressService.findAll(pageable);
+    }
+
 }
